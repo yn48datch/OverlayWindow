@@ -145,6 +145,15 @@ public abstract class OverlayWindow extends Service {
 	protected void onCommand(Intent intent){
 	}
 
+	// ____________________________________________________________
+	/**
+	 * onTouchEvent
+	 *
+	 * @param  MotionEvent タッチイベントの情報
+	 */
+	protected void onWindowTouchEvent(MotionEvent event){
+	}
+
 	/* ########################################################## */
 	/* #														# */
 	/* #					[abstract]							# */
@@ -184,9 +193,22 @@ public abstract class OverlayWindow extends Service {
 	private final OnTouchListener mWindowTouchListener = new OnTouchListener(){
 		private int mPreMoveX = -1;
 		private int mPreMoveY = -1;
-		private int MOVE_THRESHOLD = 0;			// 移動閾値
+		private int mPreFirstPointX = -1;
+		private int mPreFirstPointY = -1;
+		private boolean mIsMoving = false;
+		private int MOVE_THRESHOLD = 0;				// 移動閾値
+		private int MOVE_JUDGE_THRESHOLD = 8;		// 移動判定閾値
+
+		private void judgeMovingStatus(){
+			if(Math.abs(mPreFirstPointX - mPreMoveX)  >= MOVE_JUDGE_THRESHOLD ||
+			   Math.abs(mPreFirstPointY - mPreMoveY)  >= MOVE_JUDGE_THRESHOLD){
+				mIsMoving = true;
+			}
+		}
+
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
+			boolean isUserEventExpire = true;
 			switch(event.getAction()){
 			case MotionEvent.ACTION_MOVE:
 				move((int)event.getRawX(), (int)event.getRawY());
@@ -194,14 +216,21 @@ public abstract class OverlayWindow extends Service {
 			case MotionEvent.ACTION_UP:
 				mPreMoveX = -1;
 				mPreMoveY = -1;
+				if(mIsMoving)
+					isUserEventExpire = false;
+				mIsMoving = false;
 				break;
 			}
+			if(!mIsMoving && isUserEventExpire)
+				onWindowTouchEvent(event);
 			return true;
 		}
 		private void move(int x, int y){
 			if(mPreMoveX == -1 || mPreMoveY == -1){
 				mPreMoveX = x;
 				mPreMoveY = y;
+				mPreFirstPointX = x;
+				mPreFirstPointY = y;
 				return;
 			}
 
@@ -223,6 +252,9 @@ public abstract class OverlayWindow extends Service {
 				// 移動の保存
 				mPreMoveX = x;
 				mPreMoveY = y;
+				if(!mIsMoving){
+					judgeMovingStatus();
+				}
 
 			}
 		}
