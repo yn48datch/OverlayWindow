@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/window_bg"
-    android:padding="8dp" >
+    android:padding="4dp" >
 
     <RelativeLayout
         android:id="@+id/windowbar_layout"
@@ -14,7 +14,7 @@
             android:id="@+id/windowbar_delete_imageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:background="@android:color/transparent"
             android:src="@android:drawable/ic_delete" />
 
@@ -32,8 +32,8 @@
 
     <View
         android:id="@+id/windowbar_divider"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
         android:layout_below="@+id/windowbar_layout"
         android:background="@color/window_divider" />
 
@@ -41,7 +41,8 @@
         android:id="@+id/window_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/windowbar_divider" >
+        android:layout_below="@+id/windowbar_divider"
+        android:layout_centerInParent="true" >
 
     </FrameLayout>
 

@@ -25,7 +25,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 */
 	@Override
 	protected View setupRootView(LayoutInflater inflater, ViewGroup root) {
-		View tobeRoot = inflater.inflate(R.layout.basic_window, root);
+		View tobeRoot = inflater.inflate(R.layout.basic_window, root, true);
 		mWindowBarLayout = (ViewGroup) tobeRoot.findViewById(R.id.windowbar_layout);
 		mWindowTitleTextView = (TextView) tobeRoot.findViewById(R.id.windowbar_title_textView);
 		setTitle(getThisClass().getSimpleName());

@@ -88,6 +88,8 @@ public abstract class OverlayWindow extends Service {
 		int window_flag = 	WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
 				WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
     			WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH |
+    			WindowManager.LayoutParams.FLAG_FULLSCREEN |
+    			WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
     			WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 		WindowManager.LayoutParams params = new WindowManager.LayoutParams(
 						mAttr.window_width,										// width
@@ -95,6 +97,7 @@ public abstract class OverlayWindow extends Service {
 						WindowManager.LayoutParams.TYPE_PHONE,					// type
 						window_flag,											// flag
 						PixelFormat.TRANSLUCENT);								// format
+
 
 		// Viewを構築
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
