@@ -1,10 +1,13 @@
 package jp.co.nyuta.android.overlaywindow;
 
 import jp.co.nyuta.android.overlaywindow.classes.Attribute;
+import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +22,32 @@ public abstract class OverlayWindow extends Service {
 	private Attribute 		mAttr = new Attribute();
 	private View			mRootView = null;
 	private Intent			mIntent = null;
+	/* ########################################################## */
+	/* #														# */
+	/* #					[static]							# */
+	/* #														# */
+	/* ########################################################## */
+	// ____________________________________________________________
+	/**
+	 * 最適化したWindowサイズを取得する
+	 *
+	 * @param  context  コンテキスト
+	 * @return 最適化したWindowサイズ。Display縦横の「短い方」をWidth, HeightはWRAP_CONTENTS
+	 * @note   getAttribute()で返却するAttributeに設定すると、最適化したWindowサイズが適用されます。
+	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+	public static final Point getOptimizedWindowSize(Context context){
+		Point optimize = new Point(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+		(((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()).getSize(optimize);
+
+		if(optimize.x > optimize.y){
+			optimize.x = optimize.y;
+		}
+		optimize.y = WindowManager.LayoutParams.WRAP_CONTENT;
+
+		return optimize;
+	}
+
 
 	/* ########################################################## */
 	/* #														# */
@@ -88,7 +117,7 @@ public abstract class OverlayWindow extends Service {
 		int window_flag = 	WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
 				WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
     			WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH |
-    			WindowManager.LayoutParams.FLAG_FULLSCREEN |
+    			WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR |
     			WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
     			WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 		WindowManager.LayoutParams params = new WindowManager.LayoutParams(
