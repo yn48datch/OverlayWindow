@@ -14,7 +14,7 @@
             android:id="@+id/windowbar_delete_imageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:background="@android:color/transparent"
             android:src="@android:drawable/ic_delete" />
 
@@ -41,8 +41,7 @@
         android:id="@+id/window_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/windowbar_divider"
-        android:layout_centerInParent="true" >
+        android:layout_below="@+id/windowbar_divider">
 
     </FrameLayout>
 
