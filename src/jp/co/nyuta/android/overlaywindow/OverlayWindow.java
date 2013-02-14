@@ -29,11 +29,13 @@ public abstract class OverlayWindow extends Service {
 	/* ########################################################## */
 	// ____________________________________________________________
 	/**
-	 * 最適化したWindowサイズを取得する
+	 * 最適化したWindowサイズを取得する .
+	 * <p>
+	 * getAttribute()で返却するAttributeに設定すると、最適化したWindowサイズが適用されます。
+	 * </p>
 	 *
 	 * @param  context  コンテキスト
 	 * @return 最適化したWindowサイズ。Display縦横の「短い方」をWidth, HeightはWRAP_CONTENTS
-	 * @note   getAttribute()で返却するAttributeに設定すると、最適化したWindowサイズが適用されます。
 	 */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 	public static final Point getOptimizedWindowSize(Context context){
@@ -144,22 +146,26 @@ public abstract class OverlayWindow extends Service {
 	/* ########################################################## */
 	// ____________________________________________________________
 	/**
-	 * RootView作成
+	 * RootView作成 .
+	 * <p>
+	 * Overrideする場合は、superを呼ぶか、onCreateView()を呼ぶか、final修飾子付加が推奨
+	 * </p>
 	 *
 	 * @param  inflater  LayoutInflater
 	 * @param  root  inflateの第2引数に渡すことを推奨するrootのViewGroup
 	 * @return アプリケーション・Layoutのルート
-	 * @note   Overrideする場合は、superを呼ぶか、onCreateView()を呼ぶか、final修飾子付加が推奨
 	 */
 	protected View setupRootView(LayoutInflater inflater, ViewGroup root){
 		return onCreateView(inflater, root);
 	}
 	// ____________________________________________________________
 	/**
-	 * Intentの取得
+	 * Intentの取得 .
+	 * <p>
+	 * onCreateView内でViewの構築や初期化のため。それ以外のタイミングではnullになります。
+	 * </p>
 	 *
 	 * @return onStartCommandのIntent
-	 * @note   onCreateView内でViewの構築や初期化のため。それ以外のタイミングではnullになります。
 	 */
 	protected final Intent getIntent(){
 		return mIntent;
@@ -178,7 +184,7 @@ public abstract class OverlayWindow extends Service {
 	/**
 	 * onTouchEvent
 	 *
-	 * @param  MotionEvent タッチイベントの情報
+	 * @param  event タッチイベントの情報
 	 */
 	protected void onWindowTouchEvent(MotionEvent event){
 	}

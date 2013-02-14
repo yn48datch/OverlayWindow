@@ -20,9 +20,6 @@ public abstract class OverlayApplication extends OverlayWindow {
 	private ViewGroup mWindowBarLayout = null;
 	private TextView  mWindowTitleTextView = null;
 
-	/* (非 Javadoc)
-	 * @see jp.co.nyuta.android.overlaywindow.OverlayWindow#setupRootView(android.view.LayoutInflater, android.view.ViewGroup)
-	 */
 	@Override
 	protected View setupRootView(LayoutInflater inflater, ViewGroup root) {
 		View tobeRoot = inflater.inflate(R.layout.basic_window, root);
