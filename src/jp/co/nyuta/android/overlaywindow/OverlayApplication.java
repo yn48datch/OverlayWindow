@@ -3,6 +3,9 @@
  */
 package jp.co.nyuta.android.overlaywindow;
 
+import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,7 +38,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 		if(iconResId != 0){
 			windowIcon.setImageResource(iconResId);
 		}
-
+		setupServiceNotification();
 		onCreateView(inflater, (ViewGroup) tobeRoot.findViewById(R.id.window_container));
 
 		return tobeRoot;
@@ -51,6 +54,42 @@ public abstract class OverlayApplication extends OverlayWindow {
 	protected void setTitle(String title){
 		mWindowTitleTextView.setText(title);
 	}
+	protected void setNotification(Notification notify){
+		startForeground(getNotificationId(), notify);
+	}
+
+	@SuppressLint("NewApi")
+	@SuppressWarnings("deprecation")
+	protected void setupServiceNotification(){
+		Notification notification;
+		int iconResId = getWindowIconResourceId();
+		if(iconResId == 0){
+			iconResId = android.R.drawable.ic_menu_crop;
+		}
+		if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1){
+			// for ics
+			notification = new Notification.Builder(getApplicationContext())
+				.setSmallIcon(iconResId)
+				.setOngoing(true)
+				.getNotification();
+		}else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+			// for jb
+			notification = new Notification.Builder(getApplicationContext())
+			.setSmallIcon(iconResId)
+			.setOngoing(true)
+			.setContentTitle(mWindowTitleTextView.getText())
+			.build();
+		}else{
+			// for gb
+			notification = new Notification(
+					iconResId,
+			        null,
+			        System.currentTimeMillis());
+			notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
+			notification.number = 0;
+		}
+		setNotification(notification);
+	}
 
 	private OnClickListener mWindowClickListener = new OnClickListener(){
 
@@ -65,5 +104,5 @@ public abstract class OverlayApplication extends OverlayWindow {
 
 	};
 	protected abstract int getWindowIconResourceId();
-
+	protected abstract int getNotificationId();
 }

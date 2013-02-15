@@ -29,6 +29,13 @@
             android:text="Medium Text"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
+        <ImageButton
+            android:id="@+id/windowbar_hide_imageButton"
+            style="@style/windowbar_icon"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/windowbar_delete_imageButton"
+            android:src="@drawable/window_hide" />
+
     </RelativeLayout>
 
     <View
