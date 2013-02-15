@@ -12,11 +12,9 @@
 
         <ImageButton
             android:id="@+id/windowbar_delete_imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/windowbar_icon"
             android:layout_alignParentRight="true"
-            android:background="@android:color/transparent"
-            android:src="@android:drawable/ic_delete" />
+            android:src="@drawable/window_delete" />
 
         <TextView
             android:id="@+id/windowbar_title_textView"
