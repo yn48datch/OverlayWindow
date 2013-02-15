@@ -18,13 +18,13 @@ import android.widget.TextView;
  */
 public abstract class OverlayApplication extends OverlayWindow {
 
-	private ViewGroup mWindowBarLayout = null;
+	//private ViewGroup mWindowBarLayout = null;
 	private TextView  mWindowTitleTextView = null;
 
 	@Override
 	protected View setupRootView(LayoutInflater inflater, ViewGroup root) {
 		View tobeRoot = inflater.inflate(R.layout.basic_window, root);
-		mWindowBarLayout = (ViewGroup) tobeRoot.findViewById(R.id.windowbar_layout);
+		//mWindowBarLayout = (ViewGroup) tobeRoot.findViewById(R.id.windowbar_layout);
 		mWindowTitleTextView = (TextView) tobeRoot.findViewById(R.id.windowbar_title_textView);
 		ImageView windowIcon = (ImageView) tobeRoot.findViewById(R.id.windowbar_appicon);
 		setTitle(getThisClass().getSimpleName());
