@@ -16,13 +16,16 @@
             android:layout_alignParentRight="true"
             android:src="@drawable/window_delete" />
 
+        <ImageView
+            android:id="@+id/windowbar_appicon"
+            style="@style/windowbar_icon" />
+
         <TextView
             android:id="@+id/windowbar_title_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="14dp"
+            android:layout_alignBottom="@+id/windowbar_appicon"
+            android:layout_toRightOf="@+id/windowbar_appicon"
             android:text="Medium Text"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 

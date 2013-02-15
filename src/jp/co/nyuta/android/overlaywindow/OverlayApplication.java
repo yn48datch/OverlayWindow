@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -25,9 +26,15 @@ public abstract class OverlayApplication extends OverlayWindow {
 		View tobeRoot = inflater.inflate(R.layout.basic_window, root);
 		mWindowBarLayout = (ViewGroup) tobeRoot.findViewById(R.id.windowbar_layout);
 		mWindowTitleTextView = (TextView) tobeRoot.findViewById(R.id.windowbar_title_textView);
+		ImageView windowIcon = (ImageView) tobeRoot.findViewById(R.id.windowbar_appicon);
 		setTitle(getThisClass().getSimpleName());
 		ImageButton del = (ImageButton) tobeRoot.findViewById(R.id.windowbar_delete_imageButton);
 		del.setOnClickListener(mWindowClickListener);
+
+		int iconResId = getWindowIconResourceId();
+		if(iconResId != 0){
+			windowIcon.setImageResource(iconResId);
+		}
 
 		onCreateView(inflater, (ViewGroup) tobeRoot.findViewById(R.id.window_container));
 
@@ -57,5 +64,6 @@ public abstract class OverlayApplication extends OverlayWindow {
 		}
 
 	};
+	protected abstract int getWindowIconResourceId();
 
 }
