@@ -44,20 +44,69 @@ public abstract class OverlayApplication extends OverlayWindow {
 		return tobeRoot;
 	}
 
+	/* ########################################################## */
+	/* #														# */
+	/* #					[protected]							# */
+	/* #														# */
+	/* ########################################################## */
+	// ____________________________________________________________
+	/**
+	 * x ボタンを押した時などで、OverlayApplicationが自己終了する時のEvent
+	 * <p>
+	 * もし、終了確認をしたい場合は、Overrideして処理を入れてください。<br>
+	 * Overrideした場合、superをコールすると、stopSelf()を実行します。
+	 * </p>
+	 *
+	 */
 	protected void onPreSelfDelete(){
 		stopSelf();
 	}
 
+	// ____________________________________________________________
+	/**
+	 * WindowBarのタイトル設定 .
+	 * <p>
+	 * Overrideする場合は、superを呼ぶこと
+	 * </p>
+	 *
+	 * @param  resId テキストのリソースID
+	 */
 	protected void setTitle(int resId){
 		mWindowTitleTextView.setText(resId);
 	}
+	// ____________________________________________________________
+	/**
+	 * WindowBarのタイトル設定 .
+	 * <p>
+	 * Overrideする場合は、superを呼ぶこと
+	 * </p>
+	 *
+	 * @param  title タイトル用文字列
+	 */
 	protected void setTitle(String title){
 		mWindowTitleTextView.setText(title);
 	}
+	// ____________________________________________________________
+	/**
+	 * Notificationの設定 .
+	 * <p>
+	 * Overrideする場合は、superを呼ぶこと
+	 * </p>
+	 *
+	 * @param  notify Notificationクラス
+	 */
 	protected void setNotification(Notification notify){
 		startForeground(getNotificationId(), notify);
 	}
 
+	// ____________________________________________________________
+	/**
+	 * Notificationの作成と設定 .
+	 * <p>
+	 * Overrideする場合は、setNotification()をコールしてください
+	 * </p>
+	 *
+	 */
 	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
 	protected void setupServiceNotification(){
@@ -91,6 +140,11 @@ public abstract class OverlayApplication extends OverlayWindow {
 		setNotification(notification);
 	}
 
+	/* ########################################################## */
+	/* #														# */
+	/* #					[Listener]							# */
+	/* #														# */
+	/* ########################################################## */
 	private OnClickListener mWindowClickListener = new OnClickListener(){
 
 		@Override
@@ -103,6 +157,25 @@ public abstract class OverlayApplication extends OverlayWindow {
 		}
 
 	};
+
+	/* ########################################################## */
+	/* #														# */
+	/* #					[abstract]							# */
+	/* #														# */
+	/* ########################################################## */
+	// ____________________________________________________________
+	/**
+	 * Application Icon (WIndowBarやNotificationに表示する) のリソースID取得
+	 *
+	 * @return Application Icon (WIndowBarやNotificationに表示する) のリソースID
+	 */
 	protected abstract int getWindowIconResourceId();
+
+	// ____________________________________________________________
+	/**
+	 * NotificationのNumberを取得
+	 *
+	 * @return NotificationのNumber
+	 */
 	protected abstract int getNotificationId();
 }
