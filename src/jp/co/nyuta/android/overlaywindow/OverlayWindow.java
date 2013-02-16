@@ -17,6 +17,17 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+/**
+ *
+ * OverlayWindow（他のActivityより上のLayerで表示・常駐する）用抽象クラス<br>
+ * このクラスを継承して作ったクラスはServiceとなります。
+ * AndroidManifestにPermissionとServiceの登録が必要です。<br>
+ * <br>
+ * 必要なuses-permission : android.permission.SYSTEM_ALERT_WINDOW <br>
+ *
+ * @author Yuta
+ *
+ */
 public abstract class OverlayWindow extends Service {
 	private WindowManager	mWindowManager = null;
 	private Attribute 		mAttr = new Attribute();

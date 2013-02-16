@@ -16,6 +16,12 @@ import android.widget.TextView;
 
 
 /**
+ * WindowBarを備えた、一般アプリケーション向けのOverlayWindow用抽象クラス<br>
+ * このクラスを継承して作ったクラスはServiceとなります。
+ * AndroidManifestにPermissionとServiceの登録が必要です。<br>
+ * <br>
+ * 必要なuses-permission : android.permission.SYSTEM_ALERT_WINDOW <br>
+ *
  * @author Yuta
  *
  */
@@ -43,6 +49,13 @@ public abstract class OverlayApplication extends OverlayWindow {
 
 		return tobeRoot;
 	}
+
+	/* ########################################################## */
+	/* #														# */
+	/* #					[private]							# */
+	/* #														# */
+	/* ########################################################## */
+
 
 	/* ########################################################## */
 	/* #														# */
