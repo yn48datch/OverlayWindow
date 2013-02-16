@@ -181,7 +181,28 @@ public abstract class OverlayWindow extends Service {
 	protected final Intent getIntent(){
 		return mIntent;
 	}
-
+	// ____________________________________________________________
+	/**
+	 * OverlayWindow のAttributeの取得
+	 * <p>
+	 * onCreateView内でViewの構築や初期化のため。それ以外のタイミングではnullになります。
+	 * </p>
+	 *
+	 * @return onStartCommandのIntent
+	 */
+	protected final Attribute getWindowAttribute(){
+		return mAttr;
+	}
+	// ____________________________________________________________
+	/**
+	 * OverlayWindow のRootViewの取得
+	 *
+	 *
+	 * @return RootView
+	 */
+	protected final View getRootView(){
+		return mRootView;
+	}
 	// ____________________________________________________________
 	/**
 	 * onStartCommandで追加のIntentが来た時のEvent
