@@ -277,6 +277,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	protected void setupServiceNotification(){
 		Notification notification;
 		int iconResId = getWindowIconResourceId();
+		String subTitle = OverlayApplication.class.getSimpleName();
 		if(iconResId == 0){
 			iconResId = android.R.drawable.ic_menu_crop;
 		}
@@ -294,6 +295,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 				.setOngoing(true)
 				.setContentIntent(pi)
 				.setContentTitle(mWindowTitleTextView.getText())
+				.setContentText(subTitle)
 				.getNotification();
 		}else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
 			// for jb
@@ -302,6 +304,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 			.setOngoing(true)
 			.setContentIntent(pi)
 			.setContentTitle(mWindowTitleTextView.getText())
+			.setContentText(subTitle)
 			.build();
 		}else{
 			// for gb
@@ -309,7 +312,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 					iconResId,
 			        null,
 			        System.currentTimeMillis());
-			notification.setLatestEventInfo(getApplicationContext(), getThisClass().getSimpleName(), null, pi);
+			notification.setLatestEventInfo(getApplicationContext(), getThisClass().getSimpleName(), subTitle, pi);
 			notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 			notification.number = 0;
 		}
