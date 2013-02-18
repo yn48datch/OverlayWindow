@@ -72,7 +72,10 @@ public abstract class OverlayWindow extends Service {
 		return null;
 	}
 
-	/* (非 Javadoc)
+	/**
+	 * Service生成時にコールされる<br>
+	 * ここで、getAttribute()によりSubClassから必要な情報を取得する。
+	 *
 	 * @see android.app.Service#onCreate()
 	 */
 	@Override
@@ -83,7 +86,10 @@ public abstract class OverlayWindow extends Service {
 			mAttr = new Attribute();
 	}
 
-	/* (非 Javadoc)
+	/**
+	 * Service破棄時にコールされる<br>
+	 * ここで、必要なクラス終了、破棄処理を行う
+	 *
 	 * @see android.app.Service#onDestroy()
 	 */
 	@Override
@@ -97,7 +103,10 @@ public abstract class OverlayWindow extends Service {
 		super.onDestroy();
 	}
 
-	/* (非 Javadoc)
+	/**
+	 * StartServiceによるEventを処理。<br>
+	 * 初回はOverlayWindowのView構築処理を行う
+	 *
 	 * @see android.app.Service#onStartCommand(android.content.Intent, int, int)
 	 */
 	@Override
