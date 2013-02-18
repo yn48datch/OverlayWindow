@@ -133,7 +133,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	// これを呼んだ時にmWindowReceiverが作られる。(null開放して、新たに作るでもいいかもしれない)
 	private void setupWindowEventReceiver(){
 		if(mWindowReceiver != null){
-			Log.d(getClass().getSimpleName(), "unnkon reciever create event!!");
+			Log.d(getClass().getSimpleName(), "unknown reciever create event!!");
 			return;
 		}
 		// Intent filterの生成
