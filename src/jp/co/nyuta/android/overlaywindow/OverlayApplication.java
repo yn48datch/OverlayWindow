@@ -37,6 +37,17 @@ public abstract class OverlayApplication extends OverlayWindow {
 	private TextView  mWindowTitleTextView = null;
 	private BroadcastReceiver mWindowReceiver = null;
 
+	/* ########################################################## */
+	/* #														# */
+	/* #					[Service]							# */
+	/* #														# */
+	/* ########################################################## */
+
+	/* ########################################################## */
+	/* #														# */
+	/* #					[OverlayWindow]						# */
+	/* #														# */
+	/* ########################################################## */
 	@Override
 	protected View setupRootView(LayoutInflater inflater, ViewGroup root) {
 		View tobeRoot = inflater.inflate(R.layout.basic_window, root);
@@ -67,6 +78,8 @@ public abstract class OverlayApplication extends OverlayWindow {
 	/* #					[private]							# */
 	/* #														# */
 	/* ########################################################## */
+	// ____________________________________________________________
+	// 最小化ボタンの設定
 	private void setupMinimization(ImageButton minButton){
 		if(getWindowAttribute().enable_minimization){
 			// Click Listenerの登録
@@ -75,17 +88,22 @@ public abstract class OverlayApplication extends OverlayWindow {
 			minButton.setVisibility(View.GONE);
 		}
 	}
-
+	// ____________________________________________________________
+	// OverlayApplication 表示再開
 	private void show(View rootView){
 		onResume();
 		rootView.setVisibility(View.VISIBLE);
 	}
 
+	// ____________________________________________________________
+	// OverlayApplication サスペンド
 	private void hide(View rootView){
 		onSuspend();
 		rootView.setVisibility(View.INVISIBLE);
 	}
 
+	// ____________________________________________________________
+	// 最小化・最大化のIntentを取得
 	private Intent getMinimizationIntent(){
 		if(getWindowAttribute().enable_minimization){
 			Intent ret = new Intent("overlaywindow.toggle.show_hide");
