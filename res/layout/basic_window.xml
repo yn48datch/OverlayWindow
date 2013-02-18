@@ -26,6 +26,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/windowbar_appicon"
+            android:lines="1"
+            android:maxLines="1"
+            android:minLines="1"
             android:text="Medium Text"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
