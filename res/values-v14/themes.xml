@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Ny.OverlayActivity" parent="@android:style/Theme.Holo">
-        <!-- No Action Bar -->
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-
+    <style name="Theme.Ny.OverlayActivity" parent="@android:style/Theme.Holo.NoActionBar">
         <!-- Translucent -->
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
