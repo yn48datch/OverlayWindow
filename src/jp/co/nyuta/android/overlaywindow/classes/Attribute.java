@@ -16,11 +16,14 @@ public class Attribute {
 	public int service_start_kind;
 	/** minimization を有効にする・しないフラグ(For OverlayApplication) */
 	public boolean enable_minimization;
+	/** minimization 復帰時にdefault位置に戻すOption(For OverlayApplication) */
+	public boolean resume_reset_position;
 
 	public Attribute(){
 		window_width  = WindowManager.LayoutParams.MATCH_PARENT;
 		window_height = WindowManager.LayoutParams.WRAP_CONTENT;
 		service_start_kind = Service.START_STICKY;
 		enable_minimization = true;
+		resume_reset_position = true;
 	}
 }

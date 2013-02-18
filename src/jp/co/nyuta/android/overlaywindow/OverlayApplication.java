@@ -106,6 +106,10 @@ public abstract class OverlayApplication extends OverlayWindow {
 	// OverlayApplication 表示再開
 	private void show(View rootView){
 		onResume();
+		if(getWindowAttribute().resume_reset_position){
+			// Windowを元の位置に戻す
+			setDefaultPotition();
+		}
 		rootView.setVisibility(View.VISIBLE);
 	}
 

@@ -204,6 +204,24 @@ public abstract class OverlayWindow extends Service {
 	}
 	// ____________________________________________________________
 	/**
+	 * OverlayWindow の表示位置をDefaultに戻す
+	 * <p>
+	 * 画面から消えちゃったりとかした時に呼んでください。
+	 * </p>
+	 *
+	 */
+	protected final void setDefaultPotition(){
+		if(mRootView == null || mWindowManager == null)
+			return;
+
+		WindowManager.LayoutParams param = (WindowManager.LayoutParams) mRootView.getLayoutParams();
+		param.y = 0;
+		param.x = 0;
+		mWindowManager.updateViewLayout(mRootView, param);
+
+	}
+	// ____________________________________________________________
+	/**
 	 * OverlayWindow のRootViewの取得
 	 *
 	 *
