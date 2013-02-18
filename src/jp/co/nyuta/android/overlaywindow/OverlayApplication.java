@@ -78,11 +78,12 @@ public abstract class OverlayApplication extends OverlayWindow {
 		if(iconResId != 0){
 			windowIcon.setImageResource(iconResId);
 		}
-		// ServiceのNotificationを作成
-		setupServiceNotification();
+
 		// Recieverを作成
 		setupWindowEventReceiver();
 		onCreateView(inflater, (ViewGroup) tobeRoot.findViewById(R.id.window_container));
+		// ServiceのNotificationを作成
+		setupServiceNotification();
 
 		return tobeRoot;
 	}
