@@ -293,6 +293,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 				.setSmallIcon(iconResId)
 				.setOngoing(true)
 				.setContentIntent(pi)
+				.setContentTitle(mWindowTitleTextView.getText())
 				.getNotification();
 		}else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
 			// for jb
