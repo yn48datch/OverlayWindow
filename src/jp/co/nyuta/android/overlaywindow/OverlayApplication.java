@@ -3,6 +3,8 @@
  */
 package jp.co.nyuta.android.overlaywindow;
 
+import jp.co.nyuta.android.overlaywindow.classes.Attribute;
+import jp.co.nyuta.android.overlaywindow.classes.WindowMoveTouchListener;
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -13,8 +15,10 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -33,7 +37,7 @@ import android.widget.TextView;
  */
 public abstract class OverlayApplication extends OverlayWindow {
 
-	//private ViewGroup mWindowBarLayout = null;
+//	private ViewGroup mWindowBarLayout = null;
 	private TextView  mWindowTitleTextView = null;
 	private BroadcastReceiver mWindowReceiver = null;
 
@@ -65,7 +69,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	@Override
 	protected View setupRootView(LayoutInflater inflater, ViewGroup root) {
 		View tobeRoot = inflater.inflate(R.layout.basic_window, root);
-		//mWindowBarLayout = (ViewGroup) tobeRoot.findViewById(R.id.windowbar_layout);
+		ViewGroup windowBarLayout = (ViewGroup) tobeRoot.findViewById(R.id.windowbar_layout);
 		mWindowTitleTextView = (TextView) tobeRoot.findViewById(R.id.windowbar_title_textView);
 		ImageView windowIcon = (ImageView) tobeRoot.findViewById(R.id.windowbar_appicon);
 		setTitle(getThisClass().getSimpleName());
@@ -73,6 +77,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 		ImageButton min = (ImageButton) tobeRoot.findViewById(R.id.windowbar_hide_imageButton);
 		del.setOnClickListener(mWindowClickListener);
 		setupMinimization(min);
+		setupOnTouchListener(windowBarLayout, tobeRoot);
 
 		int iconResId = getWindowIconResourceId();
 		if(iconResId != 0){
@@ -86,6 +91,22 @@ public abstract class OverlayApplication extends OverlayWindow {
 		setupServiceNotification();
 
 		return tobeRoot;
+	}
+
+	// ____________________________________________________________
+	/**
+	 * OverlayApplicationのattribute 取得
+	 *
+	 * @param  default_attr  デフォルトのattribute
+	 * @return subクラスで規定したい設定<br>nullを返却した場合はdefaultの設定を行う
+	 */
+	@Override
+	protected final Attribute getAttribute(Attribute default_attr){
+		Attribute ret = getOverlayApplicationAttribute(default_attr);
+		if(ret.only_windowbar_move){
+			ret.enable_overlay_window_move = false;
+		}
+		return ret;
 	}
 
 	/* ########################################################## */
@@ -251,6 +272,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	protected void setTitle(String title){
 		mWindowTitleTextView.setText(title);
 	}
+
 	// ____________________________________________________________
 	/**
 	 * Notificationの設定 .
@@ -341,6 +363,19 @@ public abstract class OverlayApplication extends OverlayWindow {
 		}
 
 	};
+	private void setupOnTouchListener(View targetWindowBar, View root){
+		if(getWindowAttribute().only_windowbar_move){
+			WindowMoveTouchListener touchListener = new WindowMoveTouchListener(root, getApplicationContext());
+			touchListener.setOnTouchListener(new OnTouchListener(){
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					onWindowTouchEvent(event);
+					return true;
+				}
+			});
+			targetWindowBar.setOnTouchListener(touchListener);
+		}
+	}
 
 	/* ########################################################## */
 	/* #														# */
@@ -362,4 +397,13 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 * @return NotificationのNumber
 	 */
 	protected abstract int getNotificationId();
+
+	// ____________________________________________________________
+	/**
+	 * OverlayApplicationのattribute 取得
+	 *
+	 * @param  default_attr  デフォルトのattribute
+	 * @return subクラスで規定したい設定<br>nullを返却した場合はdefaultの設定を行う
+	 */
+	protected abstract Attribute getOverlayApplicationAttribute(Attribute default_attr);
 }

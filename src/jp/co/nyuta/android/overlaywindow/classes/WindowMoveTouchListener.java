@@ -25,8 +25,8 @@ public class WindowMoveTouchListener implements OnTouchListener {
 	private int MOVE_THRESHOLD = 0;				// 移動閾値
 	private int MOVE_JUDGE_THRESHOLD = 8;		// 移動判定閾値
 
-	public WindowMoveTouchListener(View targetWindowView, Context context){
-		mRootView = targetWindowView;
+	public WindowMoveTouchListener(View windowView, Context context){
+		mRootView = windowView;
 		mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 	}
 

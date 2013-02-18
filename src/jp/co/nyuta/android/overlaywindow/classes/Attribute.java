@@ -20,6 +20,9 @@ public class Attribute {
 	public boolean enable_minimization;
 	/** minimization 復帰時にdefault位置に戻すOption(For OverlayApplication) */
 	public boolean resume_reset_position;
+	/** WindowBarのタッチイベントのみでWindowを動かすOption(For OverlayApplication) <br>
+	 trueの場合、enable_overlay_window_move は強制的にfalseになります */
+	public boolean only_windowbar_move;
 
 	public Attribute(){
 		window_width  = WindowManager.LayoutParams.MATCH_PARENT;
@@ -28,5 +31,6 @@ public class Attribute {
 		enable_overlay_window_move = true;
 		enable_minimization = true;
 		resume_reset_position = true;
+		only_windowbar_move = false;
 	}
 }
