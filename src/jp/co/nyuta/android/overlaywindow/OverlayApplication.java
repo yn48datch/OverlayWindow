@@ -42,6 +42,20 @@ public abstract class OverlayApplication extends OverlayWindow {
 	/* #					[Service]							# */
 	/* #														# */
 	/* ########################################################## */
+	/**
+	 * Service破棄時にコールされる<br>
+	 * ここで、必要なクラス終了、破棄処理を行う
+	 *
+	 * @see jp.co.nyuta.android.overlaywindow.OverlayWindow#onDestroy()
+	 */
+	@Override
+	public void onDestroy() {
+		if(mWindowReceiver != null){
+			// レシーバの登録解除
+			getApplicationContext().unregisterReceiver(mWindowReceiver);
+		}
+		super.onDestroy();
+	}
 
 	/* ########################################################## */
 	/* #														# */
