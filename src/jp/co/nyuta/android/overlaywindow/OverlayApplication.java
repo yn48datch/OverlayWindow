@@ -122,7 +122,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 
 	// ____________________________________________________________
 	// 最小化・最大化のIntentを取得
-	private Intent getMinimizationIntent(){
+	private Intent getToggleShowHideIntent(){
 		if(getWindowAttribute().enable_minimization){
 			Intent ret = new Intent("overlaywindow.toggle.show_hide");
 			ret.putExtra("notification_id", getNotificationId());
@@ -280,7 +280,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 			iconResId = android.R.drawable.ic_menu_crop;
 		}
 
-		Intent it = getMinimizationIntent();
+		Intent it = getToggleShowHideIntent();
 		PendingIntent pi = null;
 		if(it != null)
 			pi = PendingIntent.getBroadcast(getApplicationContext(), 0, it, PendingIntent.FLAG_UPDATE_CURRENT);
