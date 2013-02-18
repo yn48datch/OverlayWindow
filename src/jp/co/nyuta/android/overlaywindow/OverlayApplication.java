@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,6 +35,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 
 	//private ViewGroup mWindowBarLayout = null;
 	private TextView  mWindowTitleTextView = null;
+	private BroadcastReceiver mWindowReceiver = null;
 
 	@Override
 	protected View setupRootView(LayoutInflater inflater, ViewGroup root) {
@@ -45,14 +47,16 @@ public abstract class OverlayApplication extends OverlayWindow {
 		ImageButton del = (ImageButton) tobeRoot.findViewById(R.id.windowbar_delete_imageButton);
 		ImageButton min = (ImageButton) tobeRoot.findViewById(R.id.windowbar_hide_imageButton);
 		del.setOnClickListener(mWindowClickListener);
-
 		setupMinimization(min);
 
 		int iconResId = getWindowIconResourceId();
 		if(iconResId != 0){
 			windowIcon.setImageResource(iconResId);
 		}
+		// ServiceのNotificationを作成
 		setupServiceNotification();
+		// Recieverを作成
+		setupWindowEventReceiver();
 		onCreateView(inflater, (ViewGroup) tobeRoot.findViewById(R.id.window_container));
 
 		return tobeRoot;
@@ -67,33 +71,6 @@ public abstract class OverlayApplication extends OverlayWindow {
 		if(getWindowAttribute().enable_minimization){
 			// Click Listenerの登録
 			minButton.setOnClickListener(mWindowClickListener);
-			// BroadcastReceiverの作成
-			BroadcastReceiver receiver = new BroadcastReceiver(){
-
-				@Override
-				public void onReceive(Context context, Intent intent) {
-					if("overlaywindow.toggle.show_hide".equals(intent.getAction())){
-						int index = intent.getIntExtra("notification_id", 0);
-						if(index != getNotificationId())
-							return;
-
-						// show/hideのトグル処理
-						View root = getRootView();
-						if(root.getVisibility() == View.VISIBLE){
-							hide(root);
-						}else{
-							show(root);
-						}
-					}
-				}
-
-			};
-
-			IntentFilter filter = new IntentFilter();
-			// filter - toggle show / hide
-			filter.addAction("overlaywindow.toggle.show_hide");
-			getApplicationContext().registerReceiver(receiver, filter);
-
 		}else{
 			minButton.setVisibility(View.GONE);
 		}
@@ -116,6 +93,64 @@ public abstract class OverlayApplication extends OverlayWindow {
 			return ret;
 		}
 		return null;
+	}
+
+	// ____________________________________________________________
+	// OverlayApplication のイベントレシーバ
+	// すべての設定はAttribute or タイミング依存の無いように設計が必要
+	// これを呼んだ時にmWindowReceiverが作られる。(null開放して、新たに作るでもいいかもしれない)
+	private void setupWindowEventReceiver(){
+		if(mWindowReceiver != null){
+			Log.d(getClass().getSimpleName(), "unnkon reciever create event!!");
+			return;
+		}
+		// Intent filterの生成
+		IntentFilter filter = new IntentFilter();
+		boolean create = false;
+
+		// ________________________________________________
+		// filter - toggle show / hide
+		if(getWindowAttribute().enable_minimization){
+			filter.addAction("overlaywindow.toggle.show_hide");
+			create = true;
+		}
+
+		// Reciever作成が必要かどうかの判断
+		if(!create){
+			// 作りません
+			filter = null;
+			return;
+		}
+
+		// BroadcastReceiverの作成
+		mWindowReceiver = new BroadcastReceiver(){
+			@Override
+			public void onReceive(Context context, Intent intent) {
+
+				// ________________________________________________
+				// toggle show / hide
+				if("overlaywindow.toggle.show_hide".equals(intent.getAction())){
+					int index = intent.getIntExtra("notification_id", 0);
+					// TODO @debug start
+					Log.d(getThisClass().getSimpleName(), "on Show/Hide event id : " + index);
+					// TODO @debug end
+
+					if(index != getNotificationId())
+						return;
+					// show/hideのトグル処理
+					View root = getRootView();
+					if(root.getVisibility() == View.VISIBLE){
+						hide(root);
+					}else{
+						show(root);
+					}
+				}
+				// end of onReceive.
+			}
+		};
+
+		// Receiverを登録する
+		getApplicationContext().registerReceiver(mWindowReceiver, filter);
 	}
 
 	/* ########################################################## */
