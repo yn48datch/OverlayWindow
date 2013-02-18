@@ -1,6 +1,7 @@
 package jp.co.nyuta.android.overlaywindow;
 
 import jp.co.nyuta.android.overlaywindow.classes.Attribute;
+import jp.co.nyuta.android.overlaywindow.classes.WindowMoveTouchListener;
 import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Context;
@@ -153,7 +154,7 @@ public abstract class OverlayWindow extends Service {
 		// Viewを構築
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mRootView = setupRootView(inflater, null);
-		mRootView.setOnTouchListener(mWindowTouchListener);
+		setupOnTouchListener();
 
 		// WindowManagerにViewを追加
 		mWindowManager.addView(mRootView, params);
@@ -283,76 +284,17 @@ public abstract class OverlayWindow extends Service {
 	/* #					[Listener]							# */
 	/* #														# */
 	/* ########################################################## */
-
-	private final OnTouchListener mWindowTouchListener = new OnTouchListener(){
-		private int mPreMoveX = -1;
-		private int mPreMoveY = -1;
-		private int mPreFirstPointX = -1;
-		private int mPreFirstPointY = -1;
-		private boolean mIsMoving = false;
-		private int MOVE_THRESHOLD = 0;				// 移動閾値
-		private int MOVE_JUDGE_THRESHOLD = 8;		// 移動判定閾値
-
-		private void judgeMovingStatus(){
-			if(Math.abs(mPreFirstPointX - mPreMoveX)  >= MOVE_JUDGE_THRESHOLD ||
-			   Math.abs(mPreFirstPointY - mPreMoveY)  >= MOVE_JUDGE_THRESHOLD){
-				mIsMoving = true;
-			}
-		}
-
-		@Override
-		public boolean onTouch(View v, MotionEvent event) {
-			boolean isUserEventExpire = true;
-			switch(event.getAction()){
-			case MotionEvent.ACTION_MOVE:
-				move((int)event.getRawX(), (int)event.getRawY());
-				break;
-			case MotionEvent.ACTION_UP:
-				mPreMoveX = -1;
-				mPreMoveY = -1;
-				if(mIsMoving)
-					isUserEventExpire = false;
-				mIsMoving = false;
-				break;
-			}
-			if(!mIsMoving && isUserEventExpire)
-				onWindowTouchEvent(event);
-			return true;
-		}
-		private void move(int x, int y){
-			if(mPreMoveX == -1 || mPreMoveY == -1){
-				mPreMoveX = x;
-				mPreMoveY = y;
-				mPreFirstPointX = x;
-				mPreFirstPointY = y;
-				return;
-			}
-
-			// 動きがあったかみる
-			if(Math.abs(x - mPreMoveX) >= MOVE_THRESHOLD && Math.abs(y - mPreMoveY) >= MOVE_THRESHOLD){
-				// 差分を抽出
-				int dif_x = x - mPreMoveX;
-				int dif_y = y - mPreMoveY;
-
-				//移動箇所
-				WindowManager.LayoutParams param = (WindowManager.LayoutParams) mRootView.getLayoutParams();
-				int margine_x = param.x + dif_x;
-				int margine_y = param.y + dif_y;
-
-				// 移動処理
-				param.y = margine_y;
-				param.x = margine_x;
-				mWindowManager.updateViewLayout(mRootView, param);
-				// 移動の保存
-				mPreMoveX = x;
-				mPreMoveY = y;
-				if(!mIsMoving){
-					judgeMovingStatus();
+	private void setupOnTouchListener(){
+		if(mAttr.enable_overlay_window_move){
+			WindowMoveTouchListener touchListener = new WindowMoveTouchListener(mRootView, getApplicationContext());
+			touchListener.setOnTouchListener(new OnTouchListener(){
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					onWindowTouchEvent(event);
+					return true;
 				}
-
-			}
+			});
+			mRootView.setOnTouchListener(touchListener);
 		}
-
-
-	};
+	}
 }
