@@ -10,12 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <ImageButton
-            android:id="@+id/windowbar_delete_imageButton"
-            style="@style/windowbar_button"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/window_delete" />
-
         <ImageView
             android:id="@+id/windowbar_appicon"
             style="@style/windowbar_icon" />
@@ -32,6 +26,12 @@
             android:text="Medium Text"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/windowbar_delete_imageButton"
+            style="@style/windowbar_button"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/window_delete" />
 
         <ImageButton
             android:id="@+id/windowbar_hide_imageButton"
