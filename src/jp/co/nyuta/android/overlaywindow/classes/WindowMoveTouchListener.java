@@ -21,6 +21,7 @@ public class WindowMoveTouchListener implements OnTouchListener {
 	private int mPreFirstPointX = -1;
 	private int mPreFirstPointY = -1;
 	private boolean mIsMoving = false;
+	private boolean mMoveEnable = true;
 	private OnTouchListener mUserOnTouchListener = null;
 	private int MOVE_THRESHOLD = 0;				// 移動閾値
 	private int MOVE_JUDGE_THRESHOLD = 8;		// 移動判定閾値
@@ -32,6 +33,10 @@ public class WindowMoveTouchListener implements OnTouchListener {
 
 	public void setOnTouchListener(OnTouchListener l){
 		mUserOnTouchListener = l;
+	}
+
+	public void setMoveEnable(boolean en){
+		mMoveEnable = en;
 	}
 
 	private void judgeMovingStatus(){
@@ -62,6 +67,9 @@ public class WindowMoveTouchListener implements OnTouchListener {
 	}
 
 	private void move(int x, int y){
+		if(!mMoveEnable)
+			return;
+
 		if(mPreMoveX == -1 || mPreMoveY == -1){
 			mPreMoveX = x;
 			mPreMoveY = y;

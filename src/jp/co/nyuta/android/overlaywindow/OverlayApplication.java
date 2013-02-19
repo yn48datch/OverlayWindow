@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
@@ -40,6 +41,9 @@ public abstract class OverlayApplication extends OverlayWindow {
 //	private ViewGroup mWindowBarLayout = null;
 	private TextView  mWindowTitleTextView = null;
 	private BroadcastReceiver mWindowReceiver = null;
+	private WindowManager.LayoutParams mBeforeMaximizationLayout = null;
+	private WindowMoveTouchListener mMoveTouchListener = null;
+	private ImageButton				mMaxToggleButton = null;
 
 	/* ########################################################## */
 	/* #														# */
@@ -75,8 +79,10 @@ public abstract class OverlayApplication extends OverlayWindow {
 		setTitle(getThisClass().getSimpleName());
 		ImageButton del = (ImageButton) tobeRoot.findViewById(R.id.windowbar_delete_imageButton);
 		ImageButton min = (ImageButton) tobeRoot.findViewById(R.id.windowbar_hide_imageButton);
+		mMaxToggleButton = (ImageButton) tobeRoot.findViewById(R.id.windowbar_fit_display_imageButton);
 		del.setOnClickListener(mWindowClickListener);
 		setupMinimization(min);
+		setupMaximization(mMaxToggleButton);
 		setupOnTouchListener(windowBarLayout, tobeRoot);
 
 		int iconResId = getWindowIconResourceId();
@@ -124,6 +130,19 @@ public abstract class OverlayApplication extends OverlayWindow {
 			minButton.setVisibility(View.GONE);
 		}
 	}
+
+	// ____________________________________________________________
+	// 最大化ボタンの設定
+	private void setupMaximization(ImageButton maxButton){
+		if(getWindowAttribute().enable_maximization){
+			// Click Listenerの登録
+			maxButton.setOnClickListener(mWindowClickListener);
+		}else{
+			maxButton.setVisibility(View.GONE);
+			mMaxToggleButton = null;
+		}
+	}
+
 	// ____________________________________________________________
 	// OverlayApplication 表示再開
 	private void show(View rootView){
@@ -247,7 +266,57 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 */
 	protected void onResume(){
 	}
+	// ____________________________________________________________
+	/**
+	 * 最大化時のEvent.
+	 * <p>
+	 * 最大化時に処理を行いたい場合はOverrideしてください。<br>
+	 * defaultでは、ViewのWidth/HeightをMATCH_PARENTにします。<br>
+	 * また、復帰時の情報のため、変更前のLayoutParamを保持します。
+	 * </p>
+	 *
+	 */
+	protected void onLayoutFitDisplay(){
+		View rootView = getRootView();
+		WindowManager.LayoutParams param = (WindowManager.LayoutParams) rootView.getLayoutParams();
+		mBeforeMaximizationLayout = new WindowManager.LayoutParams();
+		mBeforeMaximizationLayout.copyFrom(param);
 
+		param.width = WindowManager.LayoutParams.MATCH_PARENT;
+		param.height = WindowManager.LayoutParams.MATCH_PARENT;
+		param.x = 0;
+		param.y = 0;
+		((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(rootView, param);
+		if(mMoveTouchListener != null){
+			mMoveTouchListener.setMoveEnable(false);
+		}
+		mMaxToggleButton.setImageResource(R.drawable.window_normal_display);
+	}
+	// ____________________________________________________________
+	/**
+	 * 最大化復帰時のEvent.
+	 * <p>
+	 * 最大化復帰時に処理を行いたい場合はOverrideしてください。<br>
+	 * defaultでは、Attribute情報にて復帰します。
+	 * </p>
+	 */
+	protected void onLayoutNormalDisplay(){
+		View rootView = getRootView();
+		if(mBeforeMaximizationLayout == null){
+			// fail safe
+			mBeforeMaximizationLayout = (WindowManager.LayoutParams) rootView.getLayoutParams();
+			mBeforeMaximizationLayout.width = getWindowAttribute().window_width;
+			mBeforeMaximizationLayout.height = getWindowAttribute().window_height;
+			mBeforeMaximizationLayout.x = 0;
+			mBeforeMaximizationLayout.y = 0;
+		}
+		((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(rootView, mBeforeMaximizationLayout);
+		mBeforeMaximizationLayout = null;
+		if(mMoveTouchListener != null){
+			mMoveTouchListener.setMoveEnable(true);
+		}
+		mMaxToggleButton.setImageResource(R.drawable.window_fit_display);
+	}
 	// ____________________________________________________________
 	/**
 	 * WindowBarのタイトル設定 .
@@ -358,6 +427,12 @@ public abstract class OverlayApplication extends OverlayWindow {
 				if(root.getVisibility() == View.VISIBLE){
 					hide(root);
 				}
+			}else if(id == R.id.windowbar_fit_display_imageButton){
+				if(mBeforeMaximizationLayout == null){
+					onLayoutFitDisplay();
+				}else{
+					onLayoutNormalDisplay();
+				}
 			}
 
 		}
@@ -365,15 +440,15 @@ public abstract class OverlayApplication extends OverlayWindow {
 	};
 	private void setupOnTouchListener(View targetWindowBar, View root){
 		if(getWindowAttribute().only_windowbar_move){
-			WindowMoveTouchListener touchListener = new WindowMoveTouchListener(root, getApplicationContext());
-			touchListener.setOnTouchListener(new OnTouchListener(){
+			mMoveTouchListener = new WindowMoveTouchListener(root, getApplicationContext());
+			mMoveTouchListener.setOnTouchListener(new OnTouchListener(){
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
 					onWindowTouchEvent(event);
 					return true;
 				}
 			});
-			targetWindowBar.setOnTouchListener(touchListener);
+			targetWindowBar.setOnTouchListener(mMoveTouchListener);
 		}
 	}
 

@@ -34,11 +34,17 @@
             android:src="@drawable/window_delete" />
 
         <ImageButton
+            android:id="@+id/windowbar_fit_display_imageButton"
+            style="@style/windowbar_button"
+            android:layout_toLeftOf="@+id/windowbar_delete_imageButton"
+            android:src="@drawable/window_fit_display" />
+
+        <ImageButton
             android:id="@+id/windowbar_hide_imageButton"
             style="@style/windowbar_button"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/windowbar_delete_imageButton"
+            android:layout_toLeftOf="@+id/windowbar_fit_display_imageButton"
             android:src="@drawable/window_hide" />
+
 
     </RelativeLayout>
 

@@ -141,7 +141,6 @@ public abstract class OverlayWindow extends Service {
 				WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
     			WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH |
     			WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR |
-    			WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
     			WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 		WindowManager.LayoutParams params = new WindowManager.LayoutParams(
 						mAttr.window_width,										// width
