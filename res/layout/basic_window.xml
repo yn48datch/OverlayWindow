@@ -12,7 +12,7 @@
 
         <ImageButton
             android:id="@+id/windowbar_delete_imageButton"
-            style="@style/windowbar_icon"
+            style="@style/windowbar_button"
             android:layout_alignParentRight="true"
             android:src="@drawable/window_delete" />
 
@@ -34,7 +34,7 @@
 
         <ImageButton
             android:id="@+id/windowbar_hide_imageButton"
-            style="@style/windowbar_icon"
+            style="@style/windowbar_button"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/windowbar_delete_imageButton"
             android:src="@drawable/window_hide" />
