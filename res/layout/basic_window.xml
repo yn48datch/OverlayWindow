@@ -50,24 +50,22 @@
                 android:id="@+id/windowbar_delete_imageButton"
                 style="@style/windowbar_button"
                 android:src="@drawable/window_delete" />
-
         </LinearLayout>
 
-    </RelativeLayout>
+        <View
+            android:id="@+id/windowbar_divider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_alignBottom="@id/windowbar_button_container"
+            android:background="@color/window_divider" />
 
-    <View
-        android:id="@+id/windowbar_divider"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_below="@+id/windowbar_layout"
-        android:background="@color/window_divider" />
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/window_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/windowbar_divider">
-
+        android:layout_below="@+id/windowbar_layout" >
     </FrameLayout>
 
 </RelativeLayout>
