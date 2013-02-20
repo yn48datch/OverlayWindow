@@ -127,6 +127,22 @@ public abstract class OverlayWindow extends Service {
 
 	/* ########################################################## */
 	/* #														# */
+	/* #					[public]							# */
+	/* #														# */
+	/* ########################################################## */
+	// ____________________________________________________________
+	/**
+	 * Windowサイズの取得<br>
+	 * RootViewのWindowSizeを取得します
+	 *
+	 * @return Windowのサイズ
+	 */
+	public final Point getWindowSize(){
+		return new Point(mRootView.getWidth(), mRootView.getHeight());
+	}
+
+	/* ########################################################## */
+	/* #														# */
 	/* #					[private]							# */
 	/* #														# */
 	/* ########################################################## */
@@ -247,7 +263,6 @@ public abstract class OverlayWindow extends Service {
 	 */
 	protected void onWindowTouchEvent(MotionEvent event){
 	}
-
 	/* ########################################################## */
 	/* #														# */
 	/* #					[abstract]							# */
