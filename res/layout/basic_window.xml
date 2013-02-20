@@ -21,6 +21,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/windowbar_button_container"
             android:layout_toRightOf="@+id/windowbar_appicon"
+            android:ellipsize="end"
             android:lines="1"
             android:maxLines="1"
             android:minLines="1"
