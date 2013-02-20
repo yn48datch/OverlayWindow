@@ -19,6 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/windowbar_button_container"
             android:layout_toRightOf="@+id/windowbar_appicon"
             android:lines="1"
             android:maxLines="1"
@@ -27,24 +28,29 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold" />
 
-        <ImageButton
-            android:id="@+id/windowbar_delete_imageButton"
-            style="@style/windowbar_button"
+        <LinearLayout
+            android:id="@+id/windowbar_button_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:src="@drawable/window_delete" />
+            android:layout_centerInParent="true" >
 
-        <ImageButton
-            android:id="@+id/windowbar_fit_display_imageButton"
-            style="@style/windowbar_button"
-            android:layout_toLeftOf="@+id/windowbar_delete_imageButton"
-            android:src="@drawable/window_fit_display" />
+            <ImageButton
+                android:id="@+id/windowbar_hide_imageButton"
+                style="@style/windowbar_button"
+                android:src="@drawable/window_hide" />
 
-        <ImageButton
-            android:id="@+id/windowbar_hide_imageButton"
-            style="@style/windowbar_button"
-            android:layout_toLeftOf="@+id/windowbar_fit_display_imageButton"
-            android:src="@drawable/window_hide" />
+            <ImageButton
+                android:id="@+id/windowbar_fit_display_imageButton"
+                style="@style/windowbar_button"
+                android:src="@drawable/window_fit_display" />
 
+            <ImageButton
+                android:id="@+id/windowbar_delete_imageButton"
+                style="@style/windowbar_button"
+                android:src="@drawable/window_delete" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 
