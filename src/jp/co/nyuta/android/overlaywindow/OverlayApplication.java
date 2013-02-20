@@ -38,7 +38,7 @@ import android.widget.TextView;
  */
 public abstract class OverlayApplication extends OverlayWindow {
 
-//	private ViewGroup mWindowBarLayout = null;
+	private ViewGroup mWindowBarLayout = null;
 	private TextView  mWindowTitleTextView = null;
 	private BroadcastReceiver mWindowReceiver = null;
 	private WindowManager.LayoutParams mBeforeMaximizationLayout = null;
@@ -67,13 +67,40 @@ public abstract class OverlayApplication extends OverlayWindow {
 
 	/* ########################################################## */
 	/* #														# */
+	/* #						[public]						# */
+	/* #														# */
+	/* ########################################################## */
+	// ____________________________________________________________
+	/**
+	 * WindowBarの高さを取得 (表示領域をUser側で確認するため)
+	 *
+	 * @return WindowBarのHeight
+	 *
+	 */
+	public int getWindowBarHeight(){
+		return mWindowBarLayout.getHeight();
+	}
+	// ____________________________________________________________
+	/**
+	 * WindowBarの幅を取得 (表示領域をUser側で確認するため)
+	 *
+	 * @return WindowBarのWidth
+	 *
+	 */
+	public int getWindowBarWidth(){
+		return mWindowBarLayout.getWidth();
+	}
+
+
+	/* ########################################################## */
+	/* #														# */
 	/* #					[OverlayWindow]						# */
 	/* #														# */
 	/* ########################################################## */
 	@Override
 	protected View setupRootView(LayoutInflater inflater, ViewGroup root) {
 		View tobeRoot = inflater.inflate(R.layout.basic_window, root);
-		ViewGroup windowBarLayout = (ViewGroup) tobeRoot.findViewById(R.id.windowbar_layout);
+		mWindowBarLayout = (ViewGroup) tobeRoot.findViewById(R.id.windowbar_layout);
 		mWindowTitleTextView = (TextView) tobeRoot.findViewById(R.id.windowbar_title_textView);
 		ImageView windowIcon = (ImageView) tobeRoot.findViewById(R.id.windowbar_appicon);
 		setTitle(getThisClass().getSimpleName());
@@ -83,7 +110,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 		del.setOnClickListener(mWindowClickListener);
 		setupMinimization(min);
 		setupMaximization(mMaxToggleButton);
-		setupOnTouchListener(windowBarLayout, tobeRoot);
+		setupOnTouchListener(mWindowBarLayout, tobeRoot);
 
 		int iconResId = getWindowIconResourceId();
 		if(iconResId != 0){
