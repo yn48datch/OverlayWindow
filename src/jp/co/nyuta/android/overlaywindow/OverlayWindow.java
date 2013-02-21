@@ -156,7 +156,7 @@ public abstract class OverlayWindow extends Service {
 		WindowManager.LayoutParams params = new WindowManager.LayoutParams(
 						mAttr.window_width,										// width
 						mAttr.window_height,									// height
-						WindowManager.LayoutParams.TYPE_PHONE,					// type
+						mAttr.overlay_window_layer,								// type
 						mAttr.overlay_window_flag,								// flag
 						PixelFormat.TRANSLUCENT);								// format
 

@@ -18,6 +18,8 @@ public class Attribute {
 	public boolean enable_overlay_window_move;
 	/** OverlayWindowシステムで使用するWindowManager.LayoutParamsのフラグ<br>OverlayApplicationはFLAG_LAYOUT_NO_LIMITSをつけたり外したりします。  */
 	public int overlay_window_flag;
+	/** OverlayWindowシステムのLayerを指定します。<br>DefaultはWindowManager.LayoutParams.TYPE_PHONです。<br>注意！TYPE_SYSTEM_ERRORを使用すると、Androidシステムエラー時に何もできなくなる可能性があります。 */
+	public int overlay_window_layer;
 	/** minimization を有効にする・しないフラグ(For OverlayApplication) */
 	public boolean enable_minimization;
 	/** maximization を有効にする・しないフラグ(For OverlayApplication) */
@@ -40,5 +42,6 @@ public class Attribute {
 		overlay_window_flag = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
 							  WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
 							  WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+		overlay_window_layer = WindowManager.LayoutParams.TYPE_PHONE;
 	}
 }
