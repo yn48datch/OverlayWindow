@@ -54,8 +54,6 @@ public abstract class OverlayCreationActivity extends Activity {
 
 		service_intent.setClassName(service.getPackage().getName(), service.getName());
 		startService(service_intent);
-
-
 	}
 	// ____________________________________________________________
 	/**
