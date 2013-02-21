@@ -199,7 +199,6 @@ public abstract class OverlayWindow extends Service {
 	protected int getWindowParameterFlag(){
 		return  WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
 				WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
-    			WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH |
     			WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 	}
 
