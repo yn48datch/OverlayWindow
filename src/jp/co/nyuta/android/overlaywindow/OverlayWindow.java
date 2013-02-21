@@ -157,7 +157,7 @@ public abstract class OverlayWindow extends Service {
 						mAttr.window_width,										// width
 						mAttr.window_height,									// height
 						WindowManager.LayoutParams.TYPE_PHONE,					// type
-						getWindowParameterFlag(),								// flag
+						mAttr.overlay_window_flag,								// flag
 						PixelFormat.TRANSLUCENT);								// format
 
 
@@ -189,19 +189,6 @@ public abstract class OverlayWindow extends Service {
 	protected View setupRootView(LayoutInflater inflater, ViewGroup root){
 		return onCreateView(inflater, root);
 	}
-	// ____________________________________________________________
-	/**
-	 * OverlayWindow のWindowLayoutParamのフラグを取得
-	 *
-	 *
-	 * @return フラグ達
-	 */
-	protected int getWindowParameterFlag(){
-		return  WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-				WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
-    			WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
-	}
-
 
 	// ____________________________________________________________
 	/**

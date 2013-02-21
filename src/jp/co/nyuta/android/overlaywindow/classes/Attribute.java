@@ -16,6 +16,8 @@ public class Attribute {
 	public int service_start_kind;
 	/** OverlayWindow(OverlayWindowのView全体)でTouchEventを補足するフラグ */
 	public boolean enable_overlay_window_move;
+	/** OverlayWindowシステムで使用するWindowManager.LayoutParamsのフラグ<br>OverlayApplicationはFLAG_LAYOUT_NO_LIMITSをつけたり外したりします。  */
+	public int overlay_window_flag;
 	/** minimization を有効にする・しないフラグ(For OverlayApplication) */
 	public boolean enable_minimization;
 	/** maximization を有効にする・しないフラグ(For OverlayApplication) */
@@ -35,5 +37,8 @@ public class Attribute {
 		enable_maximization = true;
 		resume_reset_position = true;
 		only_windowbar_move = false;
+		overlay_window_flag = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+							  WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
+							  WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 	}
 }
