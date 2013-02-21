@@ -52,14 +52,14 @@
                 android:src="@drawable/window_delete" />
         </LinearLayout>
 
-        <View
-            android:id="@+id/windowbar_divider"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_alignBottom="@id/windowbar_button_container"
-            android:background="@color/window_divider" />
-
     </RelativeLayout>
+
+    <View
+        android:id="@+id/windowbar_divider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignBottom="@id/windowbar_layout"
+        android:background="@color/window_divider" />
 
     <FrameLayout
         android:id="@+id/window_container"
