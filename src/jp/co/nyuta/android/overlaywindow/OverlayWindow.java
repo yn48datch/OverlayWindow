@@ -153,15 +153,11 @@ public abstract class OverlayWindow extends Service {
 		}
 		mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 
-		int window_flag = 	WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-				WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
-    			WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH |
-    			WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 		WindowManager.LayoutParams params = new WindowManager.LayoutParams(
 						mAttr.window_width,										// width
 						mAttr.window_height,									// height
 						WindowManager.LayoutParams.TYPE_PHONE,					// type
-						window_flag,											// flag
+						getWindowParameterFlag(),								// flag
 						PixelFormat.TRANSLUCENT);								// format
 
 
@@ -193,6 +189,21 @@ public abstract class OverlayWindow extends Service {
 	protected View setupRootView(LayoutInflater inflater, ViewGroup root){
 		return onCreateView(inflater, root);
 	}
+	// ____________________________________________________________
+	/**
+	 * OverlayWindow のWindowLayoutParamのフラグを取得
+	 *
+	 *
+	 * @return フラグ達
+	 */
+	protected int getWindowParameterFlag(){
+		return  WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+				WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
+    			WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH |
+    			WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+	}
+
+
 	// ____________________________________________________________
 	/**
 	 * Intentの取得 .
@@ -233,7 +244,6 @@ public abstract class OverlayWindow extends Service {
 		param.y = 0;
 		param.x = 0;
 		mWindowManager.updateViewLayout(mRootView, param);
-
 	}
 	// ____________________________________________________________
 	/**
