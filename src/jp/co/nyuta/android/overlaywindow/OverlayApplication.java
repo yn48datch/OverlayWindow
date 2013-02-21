@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,6 +44,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	private BroadcastReceiver 			mWindowReceiver = null;
 	private WindowManager.LayoutParams 	mBeforeMaximizationLayout = null;
 	private WindowMoveTouchListener 	mMoveTouchListener = null;
+	private GestureDetector				mGestureDet = null;
 	private ImageButton					mMaxToggleButton = null;
 
 	/* ########################################################## */
@@ -197,6 +199,16 @@ public abstract class OverlayApplication extends OverlayWindow {
 			return ret;
 		}
 		return null;
+	}
+
+	// ____________________________________________________________
+	// 最大化・通常化のトグル処理
+	private void ToggleMaxNormalWindow(){
+		if(mBeforeMaximizationLayout == null){
+			onLayoutFitDisplay();
+		}else{
+			onLayoutNormalDisplay();
+		}
 	}
 
 	// ____________________________________________________________
@@ -455,11 +467,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 					hide(root);
 				}
 			}else if(id == R.id.windowbar_fit_display_imageButton){
-				if(mBeforeMaximizationLayout == null){
-					onLayoutFitDisplay();
-				}else{
-					onLayoutNormalDisplay();
-				}
+				ToggleMaxNormalWindow();
 			}
 
 		}
@@ -471,11 +479,28 @@ public abstract class OverlayApplication extends OverlayWindow {
 			mMoveTouchListener.setOnTouchListener(new OnTouchListener(){
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
+					if(mGestureDet != null){
+						mGestureDet.onTouchEvent(event);
+					}
 					onWindowTouchEvent(event);
 					return true;
 				}
 			});
 			targetWindowBar.setOnTouchListener(mMoveTouchListener);
+			mGestureDet = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener(){
+				@Override
+				public boolean onDoubleTap(MotionEvent e) {
+					ToggleMaxNormalWindow();
+					return super.onDoubleTap(e);
+				}
+
+				@Override
+				public void onLongPress(MotionEvent e) {
+					// TODO 自動生成されたメソッド・スタブ
+					super.onLongPress(e);
+				}
+
+			});
 		}
 	}
 
