@@ -47,7 +47,7 @@ public abstract class OverlayWindow extends Service {
 	 * </p>
 	 *
 	 * @param  context  コンテキスト
-	 * @return 最適化したWindowサイズ。Display縦横の「短い方」をWidth, HeightはWRAP_CONTENTS
+	 * @return 最適化したWindowサイズ。Display縦横の「短い方」をWidth/Heightに設定
 	 */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 	public static final Point getOptimizedWindowSize(Context context){
@@ -57,7 +57,7 @@ public abstract class OverlayWindow extends Service {
 		if(optimize.x > optimize.y){
 			optimize.x = optimize.y;
 		}
-		optimize.y = WindowManager.LayoutParams.WRAP_CONTENT;
+		optimize.y = optimize.x;
 
 		return optimize;
 	}
