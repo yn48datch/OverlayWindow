@@ -38,12 +38,12 @@ import android.widget.TextView;
  */
 public abstract class OverlayApplication extends OverlayWindow {
 
-	private ViewGroup mWindowBarLayout = null;
-	private TextView  mWindowTitleTextView = null;
-	private BroadcastReceiver mWindowReceiver = null;
-	private WindowManager.LayoutParams mBeforeMaximizationLayout = null;
-	private WindowMoveTouchListener mMoveTouchListener = null;
-	private ImageButton				mMaxToggleButton = null;
+	private ViewGroup 					mWindowBarLayout = null;
+	private TextView  					mWindowTitleTextView = null;
+	private BroadcastReceiver 			mWindowReceiver = null;
+	private WindowManager.LayoutParams 	mBeforeMaximizationLayout = null;
+	private WindowMoveTouchListener 	mMoveTouchListener = null;
+	private ImageButton					mMaxToggleButton = null;
 
 	/* ########################################################## */
 	/* #														# */
