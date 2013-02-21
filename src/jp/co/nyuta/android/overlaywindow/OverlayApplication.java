@@ -325,6 +325,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 		param.height = WindowManager.LayoutParams.MATCH_PARENT;
 		param.x = 0;
 		param.y = 0;
+		param.flags &= ~WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 		((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(rootView, param);
 		if(mMoveTouchListener != null){
 			mMoveTouchListener.setMoveEnable(false);
