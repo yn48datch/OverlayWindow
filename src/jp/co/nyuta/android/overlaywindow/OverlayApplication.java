@@ -46,6 +46,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	private WindowMoveTouchListener 	mMoveTouchListener = null;
 	private GestureDetector				mGestureDet = null;
 	private ImageButton					mMaxToggleButton = null;
+	private View						mDivider = null;
 
 	/* ########################################################## */
 	/* #														# */
@@ -80,7 +81,9 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 *
 	 */
 	public int getWindowBarHeight(){
-		return mWindowBarLayout.getHeight();
+		if(isWindowBarShown())
+			return mWindowBarLayout.getHeight();
+		return 0;
 	}
 	// ____________________________________________________________
 	/**
@@ -90,7 +93,41 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 *
 	 */
 	public int getWindowBarWidth(){
-		return mWindowBarLayout.getWidth();
+		if(isWindowBarShown())
+			return mWindowBarLayout.getWidth();
+		return 0;
+	}
+	// ____________________________________________________________
+	/**
+	 * WindowBarの表示
+	 *
+	 */
+	public void showWindowBar(){
+		mWindowBarLayout.setVisibility(View.VISIBLE);
+		mDivider.setVisibility(View.VISIBLE);
+	}
+	// ____________________________________________________________
+	/**
+	 * WindowBarの非表示
+	 *
+	 */
+	public void hideWindowBar(){
+		mWindowBarLayout.setVisibility(View.GONE);
+		mDivider.setVisibility(View.GONE);
+	}
+
+	// ____________________________________________________________
+	/**
+	 * WindowBarが表示中か？の確認
+	 *
+	 * @return true : 表示中 false : 非表示中
+	 *
+	 */
+	public boolean isWindowBarShown(){
+		if(mWindowBarLayout.getVisibility() == View.GONE){
+			return false;
+		}
+		return true;
 	}
 	// ____________________________________________________________
 	/**
@@ -115,6 +152,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	protected View setupRootView(LayoutInflater inflater, ViewGroup root) {
 		View tobeRoot = inflater.inflate(R.layout.basic_window, root);
 		mWindowBarLayout = (ViewGroup) tobeRoot.findViewById(R.id.windowbar_layout);
+		mDivider = tobeRoot.findViewById(R.id.windowbar_divider);
 		mWindowTitleTextView = (TextView) tobeRoot.findViewById(R.id.windowbar_title_textView);
 		ImageView windowIcon = (ImageView) tobeRoot.findViewById(R.id.windowbar_appicon);
 		setTitle(getThisClass().getSimpleName());
