@@ -92,7 +92,19 @@ public abstract class OverlayApplication extends OverlayWindow {
 	public int getWindowBarWidth(){
 		return mWindowBarLayout.getWidth();
 	}
-
+	// ____________________________________________________________
+	/**
+	 * 最大化状態かどうかの確認
+	 *
+	 * @return true : 最大化中 false : 最大化中ではない
+	 *
+	 */
+	public boolean isMaximization(){
+		if(mBeforeMaximizationLayout == null){
+			return false;
+		}
+		return true;
+	}
 
 	/* ########################################################## */
 	/* #														# */
@@ -204,7 +216,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	// ____________________________________________________________
 	// 最大化・通常化のトグル処理
 	private void ToggleMaxNormalWindow(){
-		if(mBeforeMaximizationLayout == null){
+		if(!isMaximization()){
 			onLayoutFitDisplay();
 		}else{
 			onLayoutNormalDisplay();
