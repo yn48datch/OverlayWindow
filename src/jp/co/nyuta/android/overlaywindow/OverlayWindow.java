@@ -305,7 +305,7 @@ public abstract class OverlayWindow extends Service {
 				}
 			});
 			mRootView.setOnTouchListener(touchListener);
-		}else{
+		}else if(mAttr.enable_overlay_window_touch){
 			// WindowTouchEventを設定
 			mRootView.setOnTouchListener(new OnTouchListener(){
 				@Override

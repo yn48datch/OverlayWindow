@@ -14,8 +14,11 @@ public class Attribute {
 	public int window_height;
 	/** serviceの種類 onStartCommandの戻り値に使用 */
 	public int service_start_kind;
-	/** OverlayWindow(OverlayWindowのView全体)でTouchEventを補足するフラグ */
+	/** OverlayWindow(OverlayWindowのView全体)でTouchEventを補足して、Window全体を動かすフラグ */
 	public boolean enable_overlay_window_move;
+	/** OverlayWindow(OverlayWindowのView全体)でTouchEventを補足し、User操作可能とする<br>
+	 trueの場合、enable_overlay_window_move は強制的にfalseになります */
+	public boolean enable_overlay_window_touch;
 	/** OverlayWindowシステムで使用するWindowManager.LayoutParamsのフラグ<br>OverlayApplicationはFLAG_LAYOUT_NO_LIMITSをつけたり外したりします。  */
 	public int overlay_window_flag;
 	/** OverlayWindowシステムのLayerを指定します。<br>DefaultはWindowManager.LayoutParams.TYPE_PHONです。<br>注意！TYPE_SYSTEM_ERRORを使用すると、Androidシステムエラー時に何もできなくなる可能性があります。 */
@@ -35,6 +38,7 @@ public class Attribute {
 		window_height = WindowManager.LayoutParams.WRAP_CONTENT;
 		service_start_kind = Service.START_STICKY;
 		enable_overlay_window_move = true;
+		enable_overlay_window_touch = false;
 		enable_minimization = true;
 		enable_maximization = true;
 		resume_reset_position = true;
