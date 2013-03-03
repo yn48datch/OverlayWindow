@@ -5,6 +5,7 @@ package jp.co.nyuta.android.overlaywindow;
 
 import jp.co.nyuta.android.overlaywindow.classes.Attribute;
 import jp.co.nyuta.android.overlaywindow.classes.WindowMoveTouchListener;
+import jp.co.nyuta.android.overlaywindow.classes.WindowMoveTouchListener.OnMoveListener;
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -546,10 +547,19 @@ public abstract class OverlayApplication extends OverlayWindow {
 
 				@Override
 				public void onLongPress(MotionEvent e) {
-					// TODO 自動生成されたメソッド・スタブ
 					super.onLongPress(e);
 				}
 
+			});
+			mMoveTouchListener.setOnMoveListener(new OnMoveListener(){
+				@Override
+				public boolean onMoveStart() {
+					return false;
+				}
+				@Override
+				public boolean onMoveEnd() {
+					return false;
+				}
 			});
 		}
 	}

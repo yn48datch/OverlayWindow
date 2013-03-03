@@ -23,8 +23,14 @@ public class WindowMoveTouchListener implements OnTouchListener {
 	private boolean mIsMoving = false;
 	private boolean mMoveEnable = true;
 	private OnTouchListener mUserOnTouchListener = null;
+	private OnMoveListener	mUserOnMoveListener = null;
 	private int MOVE_THRESHOLD = 0;				// 移動閾値
 	private int MOVE_JUDGE_THRESHOLD = 8;		// 移動判定閾値
+
+	public interface OnMoveListener{
+		boolean onMoveStart();
+		boolean onMoveEnd();
+	};
 
 	public WindowMoveTouchListener(View windowView, Context context){
 		mRootView = windowView;
@@ -35,6 +41,10 @@ public class WindowMoveTouchListener implements OnTouchListener {
 		mUserOnTouchListener = l;
 	}
 
+	public void setOnMoveListener(OnMoveListener l){
+		mUserOnMoveListener = l;
+	}
+
 	public void setMoveEnable(boolean en){
 		mMoveEnable = en;
 	}
@@ -43,6 +53,7 @@ public class WindowMoveTouchListener implements OnTouchListener {
 		if(Math.abs(mPreFirstPointX - mPreMoveX)  >= MOVE_JUDGE_THRESHOLD ||
 		   Math.abs(mPreFirstPointY - mPreMoveY)  >= MOVE_JUDGE_THRESHOLD){
 			mIsMoving = true;
+			mUserOnMoveListener.onMoveStart();
 		}
 	}
 	@Override
@@ -55,8 +66,12 @@ public class WindowMoveTouchListener implements OnTouchListener {
 		case MotionEvent.ACTION_UP:
 			mPreMoveX = -1;
 			mPreMoveY = -1;
-			if(mIsMoving)
+			if(mIsMoving){
+				if(mUserOnMoveListener != null){
+					mUserOnMoveListener.onMoveEnd();
+				}
 				isUserEventExpire = false;
+			}
 			mIsMoving = false;
 			break;
 		}
