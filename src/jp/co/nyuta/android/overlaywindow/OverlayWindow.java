@@ -258,6 +258,7 @@ public abstract class OverlayWindow extends Service {
 	 */
 	protected void onWindowTouchEvent(MotionEvent event){
 	}
+
 	/* ########################################################## */
 	/* #														# */
 	/* #					[abstract]							# */
@@ -304,6 +305,15 @@ public abstract class OverlayWindow extends Service {
 				}
 			});
 			mRootView.setOnTouchListener(touchListener);
+		}else{
+			// WindowTouchEventを設定
+			mRootView.setOnTouchListener(new OnTouchListener(){
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					onWindowTouchEvent(event);
+					return false;
+				}
+			});
 		}
 	}
 }

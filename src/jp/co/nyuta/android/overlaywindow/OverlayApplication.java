@@ -533,7 +533,6 @@ public abstract class OverlayApplication extends OverlayWindow {
 					if(mGestureDet != null){
 						mGestureDet.onTouchEvent(event);
 					}
-					onWindowTouchEvent(event);
 					return true;
 				}
 			});
