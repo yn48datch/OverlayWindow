@@ -410,6 +410,19 @@ public abstract class OverlayApplication extends OverlayWindow {
 	}
 	// ____________________________________________________________
 	/**
+	 * Fitスクリーン状態の取得
+	 *
+	 * @return Fitスクリーン状態ならTrue
+	 */
+	protected final boolean isFitWindowScreen(){
+		if(mBeforeMaximizationLayout != null){
+			return true;
+		}
+		return false;
+	}
+
+	// ____________________________________________________________
+	/**
 	 * WindowBarのタイトル設定 .
 	 * <p>
 	 * Overrideする場合は、superを呼ぶこと
