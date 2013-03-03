@@ -378,9 +378,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 		param.y = 0;
 		param.flags &= ~WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 		((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(rootView, param);
-		if(mMoveTouchListener != null){
-			mMoveTouchListener.setMoveEnable(false);
-		}
+
 		mMaxToggleButton.setImageResource(R.drawable.window_normal_display);
 	}
 	// ____________________________________________________________
@@ -402,11 +400,8 @@ public abstract class OverlayApplication extends OverlayWindow {
 			mBeforeMaximizationLayout.y = 0;
 		}
 		((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(rootView, mBeforeMaximizationLayout);
-		mBeforeMaximizationLayout = null;
-		if(mMoveTouchListener != null){
-			mMoveTouchListener.setMoveEnable(true);
-		}
 		mMaxToggleButton.setImageResource(R.drawable.window_fit_display);
+		mBeforeMaximizationLayout = null;
 	}
 	// ____________________________________________________________
 	/**
@@ -567,6 +562,10 @@ public abstract class OverlayApplication extends OverlayWindow {
 			mMoveTouchListener.setOnMoveListener(new OnMoveListener(){
 				@Override
 				public boolean onMoveStart() {
+					if(isFitWindowScreen()){
+						// 最大化時に動いたらNormalのスクリーンに修正する
+						onLayoutNormalDisplay();
+					}
 					return false;
 				}
 				@Override
