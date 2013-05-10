@@ -13,6 +13,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Point;
 import android.os.Build;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -43,11 +44,31 @@ public abstract class OverlayApplication extends OverlayWindow {
 	private ViewGroup 					mWindowBarLayout = null;
 	private TextView  					mWindowTitleTextView = null;
 	private BroadcastReceiver 			mWindowReceiver = null;
-	private WindowManager.LayoutParams 	mBeforeMaximizationLayout = null;
+	private BeforeMaximizationInfo		mBeforeMaximizationInfo = null;
 	private WindowMoveTouchListener 	mMoveTouchListener = null;
 	private GestureDetector				mGestureDet = null;
 	private ImageButton					mMaxToggleButton = null;
 	private View						mDivider = null;
+
+	/* ########################################################## */
+	/* #														# */
+	/* #					[Inner Class]						# */
+	/* #														# */
+	/* ########################################################## */
+	private static class BeforeMaximizationInfo{
+		public WindowManager.LayoutParams 	LayoutParam = new WindowManager.LayoutParams();
+		public Point						WindowSize = new Point();
+		//public BeforeMaximizationInfo(){}
+		public BeforeMaximizationInfo(WindowManager.LayoutParams param, Point size){
+			if(param != null)
+				LayoutParam.copyFrom(param);
+
+			if(size != null){
+				WindowSize.x = size.x;
+				WindowSize.y = size.y;
+			}
+		}
+	}
 
 	/* ########################################################## */
 	/* #														# */
@@ -138,7 +159,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 *
 	 */
 	public boolean isMaximization(){
-		if(mBeforeMaximizationLayout == null){
+		if(mBeforeMaximizationInfo == null){
 			return false;
 		}
 		return true;
@@ -369,8 +390,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	protected void onLayoutFitDisplay(){
 		View rootView = getRootView();
 		WindowManager.LayoutParams param = (WindowManager.LayoutParams) rootView.getLayoutParams();
-		mBeforeMaximizationLayout = new WindowManager.LayoutParams();
-		mBeforeMaximizationLayout.copyFrom(param);
+		mBeforeMaximizationInfo = new BeforeMaximizationInfo(param, getWindowSize());
 
 		param.width = WindowManager.LayoutParams.MATCH_PARENT;
 		param.height = WindowManager.LayoutParams.MATCH_PARENT;
@@ -391,17 +411,17 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 */
 	protected void onLayoutNormalDisplay(){
 		View rootView = getRootView();
-		if(mBeforeMaximizationLayout == null){
+		if(mBeforeMaximizationInfo == null){
 			// fail safe
-			mBeforeMaximizationLayout = (WindowManager.LayoutParams) rootView.getLayoutParams();
-			mBeforeMaximizationLayout.width = getWindowAttribute().window_width;
-			mBeforeMaximizationLayout.height = getWindowAttribute().window_height;
-			mBeforeMaximizationLayout.x = 0;
-			mBeforeMaximizationLayout.y = 0;
+			mBeforeMaximizationInfo = new BeforeMaximizationInfo((WindowManager.LayoutParams) rootView.getLayoutParams(), getWindowSize());
+			mBeforeMaximizationInfo.LayoutParam.width = getWindowAttribute().window_width;
+			mBeforeMaximizationInfo.LayoutParam.height = getWindowAttribute().window_height;
+			mBeforeMaximizationInfo.LayoutParam.x = 0;
+			mBeforeMaximizationInfo.LayoutParam.y = 0;
 		}
-		((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(rootView, mBeforeMaximizationLayout);
+		((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(rootView, mBeforeMaximizationInfo.LayoutParam);
 		mMaxToggleButton.setImageResource(R.drawable.window_fit_display);
-		mBeforeMaximizationLayout = null;
+		mBeforeMaximizationInfo = null;
 	}
 	// ____________________________________________________________
 	/**
@@ -410,7 +430,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 * @return Fitスクリーン状態ならTrue
 	 */
 	protected final boolean isFitWindowScreen(){
-		if(mBeforeMaximizationLayout != null){
+		if(mBeforeMaximizationInfo != null){
 			return true;
 		}
 		return false;
@@ -564,6 +584,11 @@ public abstract class OverlayApplication extends OverlayWindow {
 				public boolean onMoveStart() {
 					if(isFitWindowScreen()){
 						// 最大化時に動いたらNormalのスクリーンに修正する
+
+						// 最大化時、WindowBarは上にある状態なので、復帰時のY位置を上部に設定する
+						Point disp_size = getDisplaySize(getApplicationContext());
+						mBeforeMaximizationInfo.LayoutParam.y = ((disp_size.y - mBeforeMaximizationInfo.WindowSize.y) / 2) * -1;
+						// NormalDisplay設定を行う
 						onLayoutNormalDisplay();
 					}
 					return false;

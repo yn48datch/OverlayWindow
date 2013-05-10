@@ -2,7 +2,7 @@ package jp.co.nyuta.android.overlaywindow;
 
 import jp.co.nyuta.android.overlaywindow.classes.Attribute;
 import jp.co.nyuta.android.overlaywindow.classes.WindowMoveTouchListener;
-import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,10 +50,8 @@ public abstract class OverlayWindow extends Service {
 	 * @param  context  コンテキスト
 	 * @return 最適化したWindowサイズ。Display縦横の「短い方」をWidth/Heightに設定
 	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 	public static final Point getOptimizedWindowSize(Context context){
-		Point optimize = new Point(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-		(((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()).getSize(optimize);
+		Point optimize = getDisplaySize(context);
 
 		if(optimize.x > optimize.y){
 			optimize.x = optimize.y;
@@ -60,6 +59,29 @@ public abstract class OverlayWindow extends Service {
 		optimize.y = optimize.x;
 
 		return optimize;
+	}
+	// ____________________________________________________________
+	/**
+	 * 画面サイズを取得する .
+	 * <p>
+	 * 端末の画面サイズを取得する
+	 * </p>
+	 *
+	 * @param  context  コンテキスト
+	 * @return 端末の画面サイズ
+	 */
+	@SuppressWarnings("deprecation")
+	@SuppressLint("NewApi")
+	public static final Point getDisplaySize(Context context){
+		Display disp = ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+		Point sizepoint = new Point();
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2){
+			disp.getSize(sizepoint);
+		}else{
+			sizepoint.x = disp.getWidth();
+			sizepoint.y = disp.getHeight();
+		}
+		return sizepoint;
 	}
 
 
