@@ -4,6 +4,7 @@
 package jp.co.nyuta.android.overlaywindow;
 
 import jp.co.nyuta.android.overlaywindow.classes.Attribute;
+import jp.co.nyuta.android.overlaywindow.classes.WindowBar;
 import jp.co.nyuta.android.overlaywindow.classes.WindowMoveTouchListener;
 import jp.co.nyuta.android.overlaywindow.classes.WindowMoveTouchListener.OnMoveListener;
 import android.annotation.SuppressLint;
@@ -21,12 +22,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 
 /**
@@ -41,14 +38,11 @@ import android.widget.TextView;
  */
 public abstract class OverlayApplication extends OverlayWindow {
 
-	private ViewGroup 					mWindowBarLayout = null;
-	private TextView  					mWindowTitleTextView = null;
 	private BroadcastReceiver 			mWindowReceiver = null;
 	private BeforeMaximizationInfo		mBeforeMaximizationInfo = null;
 	private WindowMoveTouchListener 	mMoveTouchListener = null;
 	private GestureDetector				mGestureDet = null;
-	private ImageButton					mMaxToggleButton = null;
-	private View						mDivider = null;
+	private WindowBar					mWindowBar = null;
 
 	/* ########################################################## */
 	/* #														# */
@@ -103,9 +97,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 *
 	 */
 	public int getWindowBarHeight(){
-		if(isWindowBarShown())
-			return mWindowBarLayout.getHeight();
-		return 0;
+		return mWindowBar.getHeight();
 	}
 	// ____________________________________________________________
 	/**
@@ -115,9 +107,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 *
 	 */
 	public int getWindowBarWidth(){
-		if(isWindowBarShown())
-			return mWindowBarLayout.getWidth();
-		return 0;
+		return mWindowBar.getWidth();
 	}
 	// ____________________________________________________________
 	/**
@@ -125,8 +115,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 *
 	 */
 	public void showWindowBar(){
-		mWindowBarLayout.setVisibility(View.VISIBLE);
-		mDivider.setVisibility(View.VISIBLE);
+		mWindowBar.show();
 	}
 	// ____________________________________________________________
 	/**
@@ -134,8 +123,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 *
 	 */
 	public void hideWindowBar(){
-		mWindowBarLayout.setVisibility(View.GONE);
-		mDivider.setVisibility(View.GONE);
+		mWindowBar.hide();
 	}
 
 	// ____________________________________________________________
@@ -146,10 +134,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 *
 	 */
 	public boolean isWindowBarShown(){
-		if(mWindowBarLayout.getVisibility() == View.GONE){
-			return false;
-		}
-		return true;
+		return mWindowBar.isShown();
 	}
 	// ____________________________________________________________
 	/**
@@ -164,6 +149,16 @@ public abstract class OverlayApplication extends OverlayWindow {
 		}
 		return true;
 	}
+	// ____________________________________________________________
+	/**
+	 * WindowBarクラスの取得
+	 *
+	 * @return WindowBarクラス
+	 *
+	 */
+	public WindowBar getWindowBar(){
+		return mWindowBar;
+	}
 
 	/* ########################################################## */
 	/* #														# */
@@ -173,27 +168,25 @@ public abstract class OverlayApplication extends OverlayWindow {
 	@Override
 	protected View setupRootView(LayoutInflater inflater, ViewGroup root) {
 		View tobeRoot = inflater.inflate(R.layout.basic_window, root);
-		mWindowBarLayout = (ViewGroup) tobeRoot.findViewById(R.id.windowbar_layout);
-		mDivider = tobeRoot.findViewById(R.id.windowbar_divider);
-		mWindowTitleTextView = (TextView) tobeRoot.findViewById(R.id.windowbar_title_textView);
-		ImageView windowIcon = (ImageView) tobeRoot.findViewById(R.id.windowbar_appicon);
-		setTitle(getThisClass().getSimpleName());
-		ImageButton del = (ImageButton) tobeRoot.findViewById(R.id.windowbar_delete_imageButton);
-		ImageButton min = (ImageButton) tobeRoot.findViewById(R.id.windowbar_hide_imageButton);
-		mMaxToggleButton = (ImageButton) tobeRoot.findViewById(R.id.windowbar_fit_display_imageButton);
-		del.setOnClickListener(mWindowClickListener);
-		setupMinimization(min);
-		setupMaximization(mMaxToggleButton);
-		setupOnTouchListener(mWindowBarLayout, tobeRoot);
+		ViewGroup windowbarContainer = (ViewGroup) tobeRoot.findViewById(R.id.windowbar_layout);
+
+		setupOnTouchListener(windowbarContainer, tobeRoot);
+
+		// WindowBarの設定
+		WindowBar.ResourceInformation info = new WindowBar.ResourceInformation();	// TODO Userから設定出来るように変更が必要
+		mWindowBar = new WindowBar(inflater, windowbarContainer, info, getWindowAttribute());
+		mWindowBar.setTitle(getThisClass().getSimpleName());
+		mWindowBar.setOnWindowBarEvent(mWindowBarListener);
 
 		int iconResId = getWindowIconResourceId();
 		if(iconResId != 0){
-			windowIcon.setImageResource(iconResId);
+			mWindowBar.setIcon(iconResId);
 		}
 
 		// Recieverを作成
 		setupWindowEventReceiver();
 		onCreateView(inflater, (ViewGroup) tobeRoot.findViewById(R.id.window_container));
+
 		// ServiceのNotificationを作成
 		setupServiceNotification();
 
@@ -221,29 +214,6 @@ public abstract class OverlayApplication extends OverlayWindow {
 	/* #					[private]							# */
 	/* #														# */
 	/* ########################################################## */
-	// ____________________________________________________________
-	// 最小化ボタンの設定
-	private void setupMinimization(ImageButton minButton){
-		if(getWindowAttribute().enable_minimization){
-			// Click Listenerの登録
-			minButton.setOnClickListener(mWindowClickListener);
-		}else{
-			minButton.setVisibility(View.GONE);
-		}
-	}
-
-	// ____________________________________________________________
-	// 最大化ボタンの設定
-	private void setupMaximization(ImageButton maxButton){
-		if(getWindowAttribute().enable_maximization){
-			// Click Listenerの登録
-			maxButton.setOnClickListener(mWindowClickListener);
-		}else{
-			maxButton.setVisibility(View.GONE);
-			mMaxToggleButton = null;
-		}
-	}
-
 	// ____________________________________________________________
 	// OverlayApplication 表示再開
 	private void show(View rootView){
@@ -399,7 +369,8 @@ public abstract class OverlayApplication extends OverlayWindow {
 		param.flags &= ~WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 		((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(rootView, param);
 
-		mMaxToggleButton.setImageResource(R.drawable.window_normal_display);
+		// WindowBarの最大化時設定
+		mWindowBar.noticeChangeApplicationStatus(true);
 	}
 	// ____________________________________________________________
 	/**
@@ -420,8 +391,10 @@ public abstract class OverlayApplication extends OverlayWindow {
 			mBeforeMaximizationInfo.LayoutParam.y = 0;
 		}
 		((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).updateViewLayout(rootView, mBeforeMaximizationInfo.LayoutParam);
-		mMaxToggleButton.setImageResource(R.drawable.window_fit_display);
 		mBeforeMaximizationInfo = null;
+
+		// WindowBarの通常化時設定
+		mWindowBar.noticeChangeApplicationStatus(false);
 	}
 	// ____________________________________________________________
 	/**
@@ -434,31 +407,6 @@ public abstract class OverlayApplication extends OverlayWindow {
 			return true;
 		}
 		return false;
-	}
-
-	// ____________________________________________________________
-	/**
-	 * WindowBarのタイトル設定 .
-	 * <p>
-	 * Overrideする場合は、superを呼ぶこと
-	 * </p>
-	 *
-	 * @param  resId テキストのリソースID
-	 */
-	protected void setTitle(int resId){
-		mWindowTitleTextView.setText(resId);
-	}
-	// ____________________________________________________________
-	/**
-	 * WindowBarのタイトル設定 .
-	 * <p>
-	 * Overrideする場合は、superを呼ぶこと
-	 * </p>
-	 *
-	 * @param  title タイトル用文字列
-	 */
-	protected void setTitle(String title){
-		mWindowTitleTextView.setText(title);
 	}
 
 	// ____________________________________________________________
@@ -504,7 +452,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 				.setSmallIcon(iconResId)
 				.setOngoing(true)
 				.setContentIntent(pi)
-				.setContentTitle(mWindowTitleTextView.getText())
+				.setContentTitle(mWindowBar.getTitle())
 				.setContentText(subTitle)
 				.getNotification();
 		}else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
@@ -513,7 +461,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 			.setSmallIcon(iconResId)
 			.setOngoing(true)
 			.setContentIntent(pi)
-			.setContentTitle(mWindowTitleTextView.getText())
+			.setContentTitle(mWindowBar.getTitle())
 			.setContentText(subTitle)
 			.build();
 		}else{
@@ -534,25 +482,27 @@ public abstract class OverlayApplication extends OverlayWindow {
 	/* #					[Listener]							# */
 	/* #														# */
 	/* ########################################################## */
-	private OnClickListener mWindowClickListener = new OnClickListener(){
+	private WindowBar.OnWindowBarEvent mWindowBarListener = new WindowBar.OnWindowBarEvent(){
+		@Override
+		public void onMinButtonClicked() {
+			View root = getRootView();
+			if(root.getVisibility() == View.VISIBLE){
+				hide(root);
+			}
+		}
 
 		@Override
-		public void onClick(View v) {
-			int id = v.getId();
-			if(id == R.id.windowbar_delete_imageButton){
-				onPreSelfDelete();
-			}else if(id == R.id.windowbar_hide_imageButton){
-				View root = getRootView();
-				if(root.getVisibility() == View.VISIBLE){
-					hide(root);
-				}
-			}else if(id == R.id.windowbar_fit_display_imageButton){
-				ToggleMaxNormalWindow();
-			}
+		public void onMaxButtonClicked() {
+			ToggleMaxNormalWindow();
+		}
 
+		@Override
+		public void onDelButtonClicked() {
+			onPreSelfDelete();
 		}
 
 	};
+
 	private void setupOnTouchListener(View targetWindowBar, View root){
 		if(getWindowAttribute().only_windowbar_move){
 			mMoveTouchListener = new WindowMoveTouchListener(root, getApplicationContext());
