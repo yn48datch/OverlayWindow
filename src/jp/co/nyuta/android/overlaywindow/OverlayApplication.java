@@ -96,6 +96,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 * @return WindowBarのHeight
 	 *
 	 */
+	@Deprecated
 	public int getWindowBarHeight(){
 		return mWindowBar.getHeight();
 	}
@@ -106,6 +107,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 * @return WindowBarのWidth
 	 *
 	 */
+	@Deprecated
 	public int getWindowBarWidth(){
 		return mWindowBar.getWidth();
 	}
@@ -114,6 +116,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 * WindowBarの表示
 	 *
 	 */
+	@Deprecated
 	public void showWindowBar(){
 		mWindowBar.show();
 	}
@@ -122,6 +125,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 * WindowBarの非表示
 	 *
 	 */
+	@Deprecated
 	public void hideWindowBar(){
 		mWindowBar.hide();
 	}
@@ -133,6 +137,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 	 * @return true : 表示中 false : 非表示中
 	 *
 	 */
+	@Deprecated
 	public boolean isWindowBarShown(){
 		return mWindowBar.isShown();
 	}
