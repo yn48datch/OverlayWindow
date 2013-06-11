@@ -543,6 +543,7 @@ public abstract class OverlayApplication extends OverlayWindow {
 						// 最大化時、WindowBarは上にある状態なので、復帰時のY位置を上部に設定する
 						Point disp_size = getDisplaySize(getApplicationContext());
 						mBeforeMaximizationInfo.LayoutParam.y = ((disp_size.y - mBeforeMaximizationInfo.WindowSize.y) / 2) * -1;
+						mBeforeMaximizationInfo.LayoutParam.x = ((disp_size.x - mBeforeMaximizationInfo.WindowSize.x) / 2) * -1;
 						// NormalDisplay設定を行う
 						onLayoutNormalDisplay();
 					}
