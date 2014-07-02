@@ -11,6 +11,7 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -184,7 +185,11 @@ public abstract class OverlayWindow extends Service {
 
 
 		// Viewを構築
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		Context c = getContextThemeWrapper();
+		if (c == null)
+			c = getApplicationContext();
+
+		LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mRootView = setupRootView(inflater, null);
 		setupOnTouchListener();
 
@@ -311,6 +316,14 @@ public abstract class OverlayWindow extends Service {
 	 * @return アプリケーション・Layoutのルート
 	 */
 	protected abstract View onCreateView(LayoutInflater inflater, ViewGroup root);
+	// ____________________________________________________________
+	/**
+	 * ContextThemeWrapper の取得
+	 *
+	 * @return Context(テーマ情報付き)
+	 */
+	protected abstract ContextThemeWrapper getContextThemeWrapper();
+
 	/* ########################################################## */
 	/* #														# */
 	/* #					[Listener]							# */
