@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/window_bg"
-    android:padding="@dimen/window_padding" >
+     >
 
     <LinearLayout
         android:id="@+id/windowbar_layout"
@@ -17,7 +17,8 @@
         android:id="@+id/window_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/windowbar_layout" >
+        android:layout_below="@id/windowbar_layout"
+        >
     </FrameLayout>
 
 </RelativeLayout>

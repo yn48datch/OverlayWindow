@@ -8,7 +8,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:background="@color/window_bar_bg" >
 
         <ImageView
             android:id="@+id/windowbar_appicon"
@@ -27,6 +28,7 @@
             android:minLines="1"
             android:text="Medium Text"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFF"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -52,7 +54,6 @@
                 android:src="@drawable/window_delete" />
         </LinearLayout>
     </RelativeLayout>
-
     <View
         android:id="@+id/windowbar_divider"
         android:layout_width="match_parent"
